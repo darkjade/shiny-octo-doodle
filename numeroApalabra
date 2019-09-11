@@ -140,12 +140,25 @@ function Miles(num) {
     return strMiles + ' ' + strCentenas;
 }//Miles()
 
+function millon(num, singular) {
+        var letraMillon = '';
+        if (singular == true)
+            letraMillon = 'UN MILLON';
+        else
+            letraMillon = 'MILLONES'
+        if (num % 1000000 == 0)
+            letraMillon = letraMillon + ' DE'
+        return letraMillon;
+    }
+
 function Millones(num) {
     divisor = 1000000;
     cientos = Math.floor(num / divisor)
     resto = num - (cientos * divisor)
 
-    strMillones = Seccion(num, divisor, 'UN MILLON', 'MILLONES');
+    //strMillones = Seccion(num, divisor, 'UN MILLON DE', 'MILLONES DE');
+    strMillones = Seccion(num, divisor, millon(num, true), millon(num, false));
+  
     strMiles = Miles(resto);
 
     if(strMillones == '')
@@ -161,7 +174,7 @@ function NumeroALetras(num) {
         centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
         letrasCentavos: '',
         letrasMonedaPlural: 'PESOS',//'PESOS', 'Dólares', 'Bolívares', 'etcs'
-        letrasMonedaSingular: 'PESOS', //'PESO', 'Dólar', 'Bolivar', 'etc'
+        letrasMonedaSingular: 'PESO', //'PESO', 'Dólar', 'Bolivar', 'etc'
 
         letrasMonedaCentavoPlural: 'CENTAVOS',
         letrasMonedaCentavoSingular: 'CENTAVO'
@@ -170,23 +183,16 @@ function NumeroALetras(num) {
     if (data.centavos > 0) {
         data.letrasCentavos = 'CON ' + (function (){
             if (data.centavos == 1)
-                return Millones(data.centavos) + ' ' + data.letrasMonedaCentavoSingular;
+                return Millones(data.centavos).trim() + ' ' + data.letrasMonedaCentavoSingular.trim();
             else
-                return Millones(data.centavos) + ' ' + data.letrasMonedaCentavoPlural;
+                return Millones(data.centavos).trim() + ' ' + data.letrasMonedaCentavoPlural.trim();
             })();
     };
 
     if(data.enteros == 0)
-        return 'CERO ' + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
+        return 'CERO ' + data.letrasMonedaPlural.trim() + ' ' + data.letrasCentavos.trim();
     if (data.enteros == 1)
-        return Millones(data.enteros) + ' ' + data.letrasMonedaSingular + ' ' + data.letrasCentavos;
+        return Millones(data.enteros).trim() + ' ' + data.letrasMonedaSingular.trim() + ' ' + data.letrasCentavos.trim();
     else
-        return Millones(data.enteros) + ' ' + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
+        return Millones(data.enteros).trim() + ' ' + data.letrasMonedaPlural.trim() + ' ' + data.letrasCentavos.trim();
 }//NumeroALetras()
-
-function metrosamillas(meters) {
-  if (typeof meters != 'number') {
-    return null;
-  }
-  return meters / 1000 * 0.621371;
-}
